@@ -1,6 +1,5 @@
 # CODSOFT Internship
-Web Development Tasks/projects completed as part of CODSOFT Internship program
-InternSpark Internship
+Web Development Tasks/projects completed as part of CODSOFT Internship program.
 
 Candidate Name: Siddhesh Sagare    
 Domain: Web Development Intern  
