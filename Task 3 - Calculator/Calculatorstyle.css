@@ -1,0 +1,308 @@
+/* ============================================================
+   style.css — Calculator
+   Glassmorphism Dark Aesthetic
+   ============================================================ */
+
+/* ── RESET & VARIABLES ───────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:         #080a10;
+  --glass:      rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --glass-hover:  rgba(255, 255, 255, 0.08);
+  --accent:     #5ce1e6;
+  --accent2:    #7b61ff;
+  --op-bg:      rgba(92, 225, 230, 0.12);
+  --op-border:  rgba(92, 225, 230, 0.25);
+  --op-color:   #5ce1e6;
+  --eq-bg:      linear-gradient(135deg, #5ce1e6, #7b61ff);
+  --fn-bg:      rgba(255, 255, 255, 0.07);
+  --fn-color:   rgba(255, 255, 255, 0.6);
+  --num-bg:     rgba(255, 255, 255, 0.04);
+  --num-color:  #e8eaf0;
+  --display-bg: rgba(0, 0, 0, 0.3);
+  --text:       #e8eaf0;
+  --muted:      rgba(255,255,255,0.3);
+  --ff-display: 'Share Tech Mono', monospace;
+  --ff-ui:      'Nunito', sans-serif;
+  --radius-card: 28px;
+  --radius-btn:  16px;
+  --shadow:     0 32px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.05);
+}
+
+/* ── BASE ────────────────────────────────────────────────── */
+html, body {
+  height: 100%;
+  font-family: var(--ff-ui);
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* ── BACKGROUND ORBS ─────────────────────────────────────── */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+.orb1 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(92,225,230,0.15), transparent 70%);
+  top: -100px; left: -100px;
+  animation: drift1 8s ease-in-out infinite alternate;
+}
+.orb2 {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(123,97,255,0.12), transparent 70%);
+  bottom: -80px; right: -80px;
+  animation: drift2 10s ease-in-out infinite alternate;
+}
+@keyframes drift1 {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(40px, 30px); }
+}
+@keyframes drift2 {
+  from { transform: translate(0, 0); }
+  to   { transform: translate(-30px, -40px); }
+}
+
+/* ── WRAPPER ─────────────────────────────────────────────── */
+.wrapper {
+  position: relative; z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+/* ── HEADER ──────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--ff-ui);
+  font-size: 0.72rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+.header-label {
+  font-weight: 800;
+  color: var(--accent);
+}
+.header-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.header-by {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ── CALCULATOR CARD ─────────────────────────────────────── */
+.calculator {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  width: 340px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── DISPLAY ─────────────────────────────────────────────── */
+.display {
+  background: var(--display-bg);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 18px;
+  padding: 18px 22px 14px;
+  margin-bottom: 20px;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 4px;
+  overflow: hidden;
+}
+.display-expression {
+  font-family: var(--ff-display);
+  font-size: 0.85rem;
+  color: var(--muted);
+  min-height: 20px;
+  text-align: right;
+  word-break: break-all;
+  transition: all 0.2s;
+  letter-spacing: 1px;
+}
+.display-result {
+  font-family: var(--ff-display);
+  font-size: 2.6rem;
+  font-weight: 400;
+  color: var(--text);
+  text-align: right;
+  word-break: break-all;
+  line-height: 1;
+  transition: all 0.15s;
+  letter-spacing: -1px;
+}
+.display-result.small { font-size: 1.8rem; }
+.display-result.pop {
+  animation: pop 0.15s ease;
+}
+@keyframes pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+/* ── BUTTON GRID ─────────────────────────────────────────── */
+.btn-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+/* ── BASE BUTTON ─────────────────────────────────────────── */
+.btn {
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-btn);
+  font-family: var(--ff-ui);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.1s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ripple */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.08);
+  opacity: 0;
+  transition: opacity 0.2s;
+  border-radius: inherit;
+}
+.btn:hover::after { opacity: 1; }
+.btn:active { transform: scale(0.93); }
+.btn:active::after { opacity: 0.15; }
+
+/* ── NUMBER BUTTONS ──────────────────────────────────────── */
+.btn-num {
+  background: var(--num-bg);
+  color: var(--num-color);
+}
+.btn-num:hover {
+  background: var(--glass-hover);
+  border-color: rgba(255,255,255,0.15);
+}
+
+/* ── FUNCTION BUTTONS (AC, +/−, %) ──────────────────────── */
+.btn-fn {
+  background: var(--fn-bg);
+  color: var(--fn-color);
+  font-size: 0.95rem;
+}
+.btn-fn:hover {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* ── OPERATOR BUTTONS ────────────────────────────────────── */
+.btn-op {
+  background: var(--op-bg);
+  border-color: var(--op-border);
+  color: var(--op-color);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.btn-op:hover {
+  background: rgba(92,225,230,0.2);
+  border-color: rgba(92,225,230,0.4);
+  box-shadow: 0 0 16px rgba(92,225,230,0.2);
+}
+.btn-op.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(92,225,230,0.4);
+}
+
+/* ── EQUALS BUTTON ───────────────────────────────────────── */
+.btn-eq {
+  background: var(--eq-bg);
+  border: none;
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 800;
+  box-shadow: 0 4px 20px rgba(92,225,230,0.3);
+}
+.btn-eq:hover {
+  box-shadow: 0 6px 28px rgba(92,225,230,0.5);
+  filter: brightness(1.1);
+}
+.btn-eq:active { transform: scale(0.91); }
+
+/* ── ZERO BUTTON (spans 2 cols) ──────────────────────────── */
+.btn-zero {
+  grid-column: span 2;
+  justify-content: flex-start;
+  padding-left: 26px;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.footer {
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-family: var(--ff-ui);
+}
+
+/* ── KEYBOARD HINT ───────────────────────────────────────── */
+.key-hint {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.15);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: var(--ff-ui);
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 380px) {
+  .calculator { width: 300px; padding: 18px; }
+  .btn { height: 60px; font-size: 1rem; }
+  .display-result { font-size: 2.2rem; }
+}
+@media (max-height: 680px) {
+  .wrapper { gap: 10px; }
+  .btn { height: 56px; }
+  .display { min-height: 80px; }
+}
